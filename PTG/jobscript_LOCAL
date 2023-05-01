@@ -1,0 +1,37 @@
+#!/bin/bash
+#PBS -N MPI_Test
+#PBS -l nodes=2:ppn=64
+#PBS -l walltime=20:00:00
+#PBS -q workq 
+#PBS -V
+
+cd $PBS_O_WORKDIR
+cat $PBS_NODEFILE > pbs_nodes
+#echo Working directory is $PBS_O_WORKDIR
+
+NPROCS=`wc -l < $PBS_NODEFILE`
+NNODES=`uniq $PBS_NODEFILE | wc -l`
+
+### Display the job context
+echo Running on host `hostname`
+echo Time is `date`
+echo Directory is `pwd`
+echo Using ${NPROCS} processors across ${NNODES} nodes
+
+#module load spack
+###spack load hdf5@1.12.1 
+#####spack load petsc@3.17.0
+
+#export OMP_NUM_THREADS=16
+#mkdir -p restart_dir1
+#mkdir -p restart_dir2
+#mkdir -p phi_dir
+#mkdir -p trackp_dir
+
+
+mpirun --hostfile $PBS_NODEFILE   -np  ${NPROCS}  --mca orte_base_help_aggregate 0  ./MPI_Test
+
+#mpirun --hostfile $PBS_NODEFILE  -np ${NPROCS} ./MPI_Test
+
+#--mca orte_base_help_aggregate 0 ./MPI_Test 
+

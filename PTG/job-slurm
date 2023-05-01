@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH -N 2 
+#SBATCH --ntasks-per-node=64 
+#SBATCH --error=job.%J.err 
+#SBATCH --output=job.%J.out 
+#SBATCH --time=01:00:00 
+#partition=standard
+
+cd $SLURM_SUBMIT_DIR
+
+export OMP_NUM_THREADS=1
+
+mpiexec -n 128 ./MPI_Test
